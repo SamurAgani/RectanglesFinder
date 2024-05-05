@@ -1,0 +1,6 @@
+@RectanglesFinder_HostAddress = http://localhost:5180
+
+GET {{RectanglesFinder_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
