@@ -7,17 +7,15 @@ namespace RectanglesFinder.Repositories
     public class RectangleRepository : IRectangleRepository
     {
         private readonly string _connectionString;
-        private SqlConnection _connection;
 
-        public RectangleRepository(string connectionString, SqlConnection connection = null)
+        public RectangleRepository(string connectionString)
         {
             _connectionString = connectionString;
-            _connection = connection;
         }
 
         private SqlConnection GetConnection()
         {
-            return _connection ?? new SqlConnection(_connectionString);
+            return new SqlConnection(_connectionString);
         }
 
         public async Task<BaseResponse<bool>> AddRectangle(BaseRectangle rectangle)

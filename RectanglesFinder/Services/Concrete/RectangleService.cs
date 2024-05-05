@@ -62,12 +62,19 @@ public class RectangleService : IRectangleService
             return BaseResponse<IEnumerable<Rectangle>>.Fail(null, validateResult.Errors);
 
         var allRectangles = await _rectangleRepository.GetAll();
-        var rectangles = allRectangles.Data.Where(r => !(r.Xmax < searchRectangle.Xmin || r.Xmin > searchRectangle.Xmax ||
-                                                           r.Ymax < searchRectangle.Ymin || r.Ymin > searchRectangle.Ymax))
-                                             .ToList();
+        var rectangles = allRectangles.Data.Where(r => RectanglesIntersect(r, searchRectangle))
+                                           .ToList();
         return BaseResponse<IEnumerable<Rectangle>>.Success(rectangles);
     }
 
+    private static bool RectanglesIntersect(BaseRectangle r1, BaseRectangle r2)
+    {
+        bool edgesIntersect = ((r1.Xmax >= r2.Xmin && r1.Xmax <= r2.Xmax) || (r1.Xmin >= r2.Xmin && r1.Xmin <= r2.Xmax))
+                           && ((r1.Ymax >= r2.Ymin && r1.Ymax <= r2.Ymax) || (r1.Ymin >= r2.Ymin && r1.Ymin <= r2.Ymax));
+
+
+        return edgesIntersect;
+    }
 
     public async Task SeedRectangles(int count)
     {

@@ -1,19 +1,21 @@
-﻿namespace RectanglesFinder.Extentions
+﻿using System.Text;
+
+namespace RectanglesFinder.Extentions
 {
     public static class ExceptionExtension
     {
-        public static string GetInnerExceptions(this Exception e)
+        public static StringBuilder GetInnerExceptions(this Exception e)
         {
 
-            string messages = string.Empty;
-            messages += "\n\n\n\n";
+            var messages = new StringBuilder();
+            messages.Append("\n\n\n\n");
             do
             {
-                messages += e.Message + " \n";
+                messages.Append(e.Message + " \n");
                 e = e.InnerException;
             }
             while (e != null);
-            messages += "\n\n----------------------------------------------------------------------------------------------\n\n";
+            messages.Append("\n\n----------------------------------------------------------------------------------------------\n\n");
             return messages;
         }
     }
