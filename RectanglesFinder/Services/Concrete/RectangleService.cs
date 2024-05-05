@@ -67,11 +67,11 @@ public class RectangleService : IRectangleService
         return BaseResponse<IEnumerable<Rectangle>>.Success(rectangles);
     }
 
-    private static bool RectanglesIntersect(BaseRectangle r1, BaseRectangle r2)
+    private static bool RectanglesIntersect(BaseRectangle dr, BaseRectangle sr)
     {
-        bool edgesIntersect = ((r1.Xmax >= r2.Xmin && r1.Xmax <= r2.Xmax) || (r1.Xmin >= r2.Xmin && r1.Xmin <= r2.Xmax))
-                           && ((r1.Ymax >= r2.Ymin && r1.Ymax <= r2.Ymax) || (r1.Ymin >= r2.Ymin && r1.Ymin <= r2.Ymax));
-
+        bool edgesIntersect = ((dr.Xmax >= sr.Xmin && dr.Xmax <= sr.Xmax) || (dr.Xmin >= sr.Xmin && dr.Xmin <= sr.Xmax))
+                            && ((dr.Ymax >= sr.Ymin && dr.Ymax <= sr.Ymax) || (dr.Ymin >= sr.Ymin && dr.Ymin <= sr.Ymax));       
+            
 
         return edgesIntersect;
     }
