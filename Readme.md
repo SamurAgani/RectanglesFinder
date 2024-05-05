@@ -11,6 +11,9 @@ This application searches internal database and returns a list of rectangles tha
 - **Fluent Validation**:
   - Validates incoming rectangle data to ensure correctness and prevent invalid inputs.
 
+- **Fluent Migration**:
+  - FluentMigrator is a database migration framework for .Net.
+
 - **NUnit for Unit Testing**:
   - Ensures the application remains reliable by validating functionality.
 
@@ -24,3 +27,9 @@ This application searches internal database and returns a list of rectangles tha
   - Provides an interactive API documentation for testing and understanding the available endpoints.
 
 
+ CREATE TABLE Rectangle (
+    Id int IDENTITY(1,1) PRIMARY KEY,
+    Xmin int,
+    Xmax int,
+    Ymax int,
+	Ymin int)
