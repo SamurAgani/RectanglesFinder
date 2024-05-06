@@ -70,10 +70,10 @@ public class RectangleService : IRectangleService
     {
         bool horizontalOverlap = HasOverlap(sr.Xmin, sr.Xmax, dr.Xmin, dr.Xmax);
         bool verticalOverlap = HasOverlap(sr.Ymin, sr.Ymax, dr.Ymin, dr.Ymax);
-        bool isFullyContained = IsContained(sr.Xmin, sr.Xmax, dr.Xmin, dr.Xmax) && IsContained(sr.Ymin, sr.Ymax, dr.Ymin, dr.Ymax);
-        bool isFullyContainedDB = IsContained(dr.Xmin, dr.Xmax, sr.Xmin, sr.Xmax) && IsContained(dr.Ymin, dr.Ymax, sr.Ymin, sr.Ymax);
+        bool isSRFullyContained = IsContained(sr.Xmin, sr.Xmax, dr.Xmin, dr.Xmax) && IsContained(sr.Ymin, sr.Ymax, dr.Ymin, dr.Ymax);
+        bool isDBFullyContained = IsContained(dr.Xmin, dr.Xmax, sr.Xmin, sr.Xmax) && IsContained(dr.Ymin, dr.Ymax, sr.Ymin, sr.Ymax);
 
-        return horizontalOverlap && verticalOverlap && !isFullyContained && !isFullyContainedDB;
+        return horizontalOverlap && verticalOverlap && !isSRFullyContained && !isDBFullyContained;
     }
 
     private bool HasOverlap(int start1, int end1, int start2, int end2)
