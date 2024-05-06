@@ -37,8 +37,8 @@ namespace RectangleFinderTest
             var allRectangles = new List<Rectangle>
             {
                 new Rectangle { Id = 1, Xmin = 10, Xmax = 40, Ymin = 10, Ymax = 40 },
-                new Rectangle { Id = 2, Xmin = 60, Xmax = 80, Ymin = 60, Ymax = 80 },
-                new Rectangle { Id = 3, Xmin = 0, Xmax = 20, Ymin = 0, Ymax = 20 }
+                new Rectangle { Id = 2, Xmin = 40, Xmax = 80, Ymin = 40, Ymax = 80 },
+                new Rectangle { Id = 3, Xmin = -10, Xmax = 20, Ymin = -1, Ymax = 20 }
             };
 
             // Setup the repository to return a successful response
@@ -52,7 +52,7 @@ namespace RectangleFinderTest
             Assert.IsTrue(response.IsSuccessful);
             var result = response.Data.ToList();
             Assert.AreEqual(2, result.Count); // Only two rectangles match the search criteria
-            Assert.AreEqual(1, result[0].Id);
+            Assert.AreEqual(2, result[0].Id);
             Assert.AreEqual(3, result[1].Id);
         }
 
