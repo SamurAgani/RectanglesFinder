@@ -5,19 +5,23 @@ public static class DatabaseInitializer
 {
     public static void EnsureDatabaseCreated(IConfiguration configuration)
     {
+        string databaseName = "RectangleDB";
+
+
         var connectionString = configuration["MasterDatabase"];
 
-        var databaseName = "RectangleDB";
         using (var connection = new SqlConnection(connectionString))
         {
             connection.Open();
 
-            var checkDbQuery = $"SELECT database_id FROM sys.databases WHERE Name = '{databaseName}'";
+            // Query to check if the database exists
+            var checkDbQuery = "SELECT database_id FROM sys.databases WHERE Name = @DatabaseName";
             using (var checkDbCommand = new SqlCommand(checkDbQuery, connection))
             {
+                checkDbCommand.Parameters.AddWithValue("@DatabaseName", databaseName);
                 var result = checkDbCommand.ExecuteScalar();
 
-                // If database does not exist, create it
+                // If the database does not exist, create it
                 if (result == null)
                 {
                     var createDbQuery = $"CREATE DATABASE [{databaseName}]";
