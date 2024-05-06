@@ -66,14 +66,24 @@ public class RectangleService : IRectangleService
                                            .ToList();
         return BaseResponse<IEnumerable<Rectangle>>.Success(rectangles);
     }
-
-    private static bool RectanglesIntersect(BaseRectangle dr, BaseRectangle sr)
+    private bool RectanglesIntersect(BaseRectangle dr, BaseRectangle sr)
     {
-        bool edgesIntersect = ((dr.Xmax >= sr.Xmin && dr.Xmax <= sr.Xmax) || (dr.Xmin >= sr.Xmin && dr.Xmin <= sr.Xmax))
-                            && ((dr.Ymax >= sr.Ymin && dr.Ymax <= sr.Ymax) || (dr.Ymin >= sr.Ymin && dr.Ymin <= sr.Ymax));       
-            
+        bool horizontalOverlap = HasOverlap(sr.Xmin, sr.Xmax, dr.Xmin, dr.Xmax);
+        bool verticalOverlap = HasOverlap(sr.Ymin, sr.Ymax, dr.Ymin, dr.Ymax);
+        bool isFullyContained = IsContained(sr.Xmin, sr.Xmax, dr.Xmin, dr.Xmax) && IsContained(sr.Ymin, sr.Ymax, dr.Ymin, dr.Ymax);
+        bool isFullyContainedDB = IsContained(dr.Xmin, dr.Xmax, sr.Xmin, sr.Xmax) && IsContained(dr.Ymin, dr.Ymax, sr.Ymin, sr.Ymax);
 
-        return edgesIntersect;
+        return horizontalOverlap && verticalOverlap && !isFullyContained && !isFullyContainedDB;
+    }
+
+    private bool HasOverlap(int start1, int end1, int start2, int end2)
+    {
+        return (start1 <= end2 && end1 >= start2);
+    }
+
+    private bool IsContained(int innerStart, int innerEnd, int outerStart, int outerEnd)
+    {
+        return (innerStart >= outerStart && innerEnd <= outerEnd);
     }
 
     public async Task SeedRectangles(int count)
