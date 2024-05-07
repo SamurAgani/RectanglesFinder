@@ -88,24 +88,24 @@ public class RectangleService : IRectangleService
             //rotated rectangles
             rectangles.Add(new BaseRectangle()
             {
-                Points = new List<BasePoint>()
+                Points = new List<Point>()
                     {
-                        new BasePoint { X = 3, Y = 3 },
-                        new BasePoint { X = 2, Y = 2 },
-                        new BasePoint { X = 4, Y = 2 },
-                        new BasePoint { X = 3, Y = 1 }
+                        new Point { X = 3, Y = 3 },
+                        new Point { X = 2, Y = 2 },
+                        new Point { X = 4, Y = 2 },
+                        new Point { X = 3, Y = 1 }
 
                     }
             });
 
             rectangles.Add(new BaseRectangle()
             {
-                Points = new List<BasePoint>()
+                Points = new List<Point>()
                     {
-                        new BasePoint { X = 0, Y = 1 },
-                        new BasePoint { X = 1, Y = 0 },
-                        new BasePoint { X = 0, Y = -1 },
-                        new BasePoint { X = -1, Y = 0 }
+                        new Point { X = 0, Y = 1 },
+                        new Point { X = 1, Y = 0 },
+                        new Point { X = 0, Y = -1 },
+                        new Point { X = -1, Y = 0 }
 
                     }
             });
@@ -132,22 +132,22 @@ public class RectangleService : IRectangleService
     }
     #region Private methods
 
-    private List<BasePoint> OrderRectanglePoints(List<BasePoint> points)
+    private List<Point> OrderRectanglePoints(List<Point> points)
     {
         // Find the point with the smallest x (if tie, the smallest y)
         var ordered = points.OrderBy(p => p.X).ThenBy(p => p.Y).ToList();
 
         // Check which is the top-left point (smallest x and y, or smallest x and then smallest y if there's a tie)
-        BasePoint topLeft = ordered[0].Y < ordered[1].Y ? ordered[0] : ordered[1];
-        BasePoint bottomRight = ordered[2].Y > ordered[3].Y ? ordered[2] : ordered[3];
+        Point topLeft = ordered[0].Y < ordered[1].Y ? ordered[0] : ordered[1];
+        Point bottomRight = ordered[2].Y > ordered[3].Y ? ordered[2] : ordered[3];
 
         // Top-right and bottom-left are the other two points
-        BasePoint topRight = ordered[0] == topLeft || ordered[1] == topLeft ? ordered[2] : ordered[0];
-        BasePoint bottomLeft = ordered[3] == bottomRight || ordered[2] == bottomRight ? ordered[1] : ordered[3];
+        Point topRight = ordered[0] == topLeft || ordered[1] == topLeft ? ordered[2] : ordered[0];
+        Point bottomLeft = ordered[3] == bottomRight || ordered[2] == bottomRight ? ordered[1] : ordered[3];
 
-        return new List<BasePoint> { topLeft, topRight, bottomRight, bottomLeft };
+        return new List<Point> { topLeft, topRight, bottomRight, bottomLeft };
     }
-    private bool RectanglesIntersect(Point segmentStart, Point segmentEnd, Rectangle rectangle)
+    private bool RectanglesIntersect(BasePoint segmentStart, BasePoint segmentEnd, Rectangle rectangle)
     {
         return (Intersects(segmentStart, segmentEnd, rectangle.Points[0], rectangle.Points[1]) ||
                Intersects(segmentStart, segmentEnd, rectangle.Points[1], rectangle.Points[2]) ||
@@ -155,13 +155,13 @@ public class RectangleService : IRectangleService
                Intersects(segmentStart, segmentEnd, rectangle.Points[3], rectangle.Points[0]));
     }
 
-    public bool Intersects(Point p1, Point p2, Point p3, Point p4)
+    public bool Intersects(BasePoint p1, BasePoint p2, BasePoint p3, BasePoint p4)
     {
         // Calculate direction of the points
-        int d1 = Direction(p3, p4, p1);
-        int d2 = Direction(p3, p4, p2);
-        int d3 = Direction(p1, p2, p3);
-        int d4 = Direction(p1, p2, p4);
+        double d1 = Direction(p3, p4, p1);
+        double d2 = Direction(p3, p4, p2);
+        double d3 = Direction(p1, p2, p3);
+        double d4 = Direction(p1, p2, p4);
 
         // Check if the segments straddle each other
         if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
@@ -175,29 +175,27 @@ public class RectangleService : IRectangleService
 
         return false;
     }
-    private int Direction(Point pi, Point pj, Point pk)
+    private double Direction(BasePoint pi, BasePoint pj, BasePoint pk)
     {
         // Cross-product to find the direction
         return (pk.X - pi.X) * (pj.Y - pi.Y) - (pj.X - pi.X) * (pk.Y - pi.Y);
     }
 
-    private bool OnSegment(Point pi, Point pj, Point pk)
+    private bool OnSegment(BasePoint pi, BasePoint pj, BasePoint pk)
     {
-        if (Math.Min(pi.X, pj.X) <= pk.X && pk.X <= Math.Max(pi.X, pj.X) &&
-            Math.Min(pi.Y, pj.Y) <= pk.Y && pk.Y <= Math.Max(pi.Y, pj.Y))
-            return true;
-        return false;
+        return (Math.Min(pi.X, pj.X) <= pk.X && pk.X <= Math.Max(pi.X, pj.X) &&
+                Math.Min(pi.Y, pj.Y) <= pk.Y && pk.Y <= Math.Max(pi.Y, pj.Y));
     }
     private BaseRectangle CreateRectangle(int x1, int y1, int x2, int y2)
     {
         return new BaseRectangle
         {
-            Points = new List<BasePoint>
+            Points = new List<Point>
             {
-                new BasePoint { X = x1, Y = y1 },
-                new BasePoint { X = x2, Y = y1 },
-                new BasePoint { X = x2, Y = y2 },
-                new BasePoint { X = x1, Y = y2 }
+                new Point { X = x1, Y = y1 },
+                new Point { X = x2, Y = y1 },
+                new Point { X = x2, Y = y2 },
+                new Point { X = x1, Y = y2 }
             }
         };
     }

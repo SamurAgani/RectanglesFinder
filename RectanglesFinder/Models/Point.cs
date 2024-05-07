@@ -1,8 +1,7 @@
 ﻿namespace RectanglesFinder.Models
 {
-    public class Point
+    public class Point : BasePoint
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int? Id { get; set; }
     }
 }

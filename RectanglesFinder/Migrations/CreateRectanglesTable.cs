@@ -12,13 +12,15 @@ namespace RectanglesFinder.Migrations
 
             Create.Table("Rectangle")
              .WithColumn("Id").AsInt32().PrimaryKey().Identity();
-
-
+           
+           
             Create.Table("Point")
              .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-             .WithColumn("X").AsInt32()
-             .WithColumn("Y").AsInt32()
+             .WithColumn("X").AsDouble()
+             .WithColumn("Y").AsDouble()
              .WithColumn("RectangleId").AsInt32().ForeignKey("FK_BaseRectangles_Id", "Rectangle", "Id");
+
+
 
         }
 

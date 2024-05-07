@@ -34,20 +34,20 @@ namespace RectanglesFinder.Validators
 
             return side1 == side3 && side2 == side4;
         }
-        private double Distance(BasePoint p1, BasePoint p2)
+        private double Distance(Point p1, Point p2)
         {
             return Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2));
         }
 
-        private bool IsRightAngle(BasePoint p1, BasePoint p2, BasePoint p3)
+        private bool IsRightAngle(Point p1, Point p2, Point p3)
         {
             // Vector from p1 to p2
-            int dx1 = p2.X - p1.X;
-            int dy1 = p2.Y - p1.Y;
+            double dx1 = p2.X - p1.X;
+            double dy1 = p2.Y - p1.Y;
 
             // Vector from p2 to p3
-            int dx2 = p3.X - p2.X;
-            int dy2 = p3.Y - p2.Y;
+            double dx2 = p3.X - p2.X;
+            double dy2 = p3.Y - p2.Y;
 
             // Check if the dot product is zero
             return dx1 * dx2 + dy1 * dy2 == 0;

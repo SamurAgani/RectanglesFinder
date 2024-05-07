@@ -2,7 +2,7 @@
 {
     public class SearchSegment
     {
-        public Point StartPoint { get; set; }
-        public Point EndPoint { get; set; }
+        public BasePoint StartPoint { get; set; }
+        public BasePoint EndPoint { get; set; }
     }
 }

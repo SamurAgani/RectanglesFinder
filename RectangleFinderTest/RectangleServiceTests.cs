@@ -27,8 +27,8 @@ namespace RectangleFinderTest
             // Arrange
             var searchRectangle = new SearchSegment
             {
-                StartPoint = new Point() { X = 11, Y = 0 },
-                EndPoint = new Point() { X = -11, Y = 0 }
+                StartPoint = new BasePoint() { X = 11, Y = 0 },
+                EndPoint = new BasePoint() { X = -11, Y = 0 }
             };
 
             // Simulate a list of rectangles to return from the repository
@@ -37,36 +37,36 @@ namespace RectangleFinderTest
                 new Rectangle()
                 {
                     Id = 2,
-                    Points = new List<BasePoint>()
+                    Points = new List<Point>()
                         {
-                            new BasePoint { X = 0, Y = 1 },
-                            new BasePoint { X = 1, Y = 0 },
-                            new BasePoint { X = 0, Y = -1 },
-                            new BasePoint { X = -1, Y = 0 }
+                            new Point { X = 0, Y = 1 },
+                            new Point { X = 1, Y = 0 },
+                            new Point { X = 0, Y = -1 },
+                            new Point { X = -1, Y = 0 }
                
                         }
                 },
                 new Rectangle()
                 {
                     Id = 2,
-                    Points = new List<BasePoint>()
+                    Points = new List<Point>()
                         {
-                            new BasePoint { X = 3, Y = 3 },
-                            new BasePoint { X = 2, Y = 2 },
-                            new BasePoint { X = 4, Y = 2 },
-                            new BasePoint { X = 3, Y = 1 }
+                            new Point { X = 3, Y = 3 },
+                            new Point { X = 2, Y = 2 },
+                            new Point { X = 4, Y = 2 },
+                            new Point { X = 3, Y = 1 }
                
                         }
                 },
                 new Rectangle()
                 {
                     Id = 3,
-                    Points = new List<BasePoint>()
+                    Points = new List<Point>()
                         {
-                            new BasePoint { X = 3, Y = 13 },
-                            new BasePoint { X = 12, Y = 2 },
-                            new BasePoint { X = 4, Y = 2 },
-                            new BasePoint { X = 3, Y = 111 }
+                            new Point { X = 3, Y = 13 },
+                            new Point { X = 12, Y = 2 },
+                            new Point { X = 4, Y = 2 },
+                            new Point { X = 3, Y = 111 }
                
                         }
                 }
@@ -93,12 +93,12 @@ namespace RectangleFinderTest
             // Arrange
             var validRectangle = new BaseRectangle()
             {
-                Points = new List<BasePoint>()
+                Points = new List<Point>()
                     {
-                        new BasePoint { X = -2, Y = 3 },
-                        new BasePoint { X = -2, Y = 1 },
-                        new BasePoint { X = -4, Y = 2 },
-                        new BasePoint { X = 0, Y = 2 }
+                        new Point { X = -2, Y = 3 },
+                        new Point { X = -2, Y = 1 },
+                        new Point { X = -4, Y = 2 },
+                        new Point { X = 0, Y = 2 }
 
                     }
             };
@@ -116,12 +116,12 @@ namespace RectangleFinderTest
 
             var validRectangle = new BaseRectangle()
             {
-                Points = new List<BasePoint>()
+                Points = new List<Point>()
                     {
-                        new BasePoint { X = 0, Y = 1 },
-                        new BasePoint { X = 1, Y = 0 },
-                        new BasePoint { X = 0, Y = -1 },
-                        new BasePoint { X = -1, Y = 0 }
+                        new Point { X = 0, Y = 1 },
+                        new Point { X = 1, Y = 0 },
+                        new Point { X = 0, Y = -1 },
+                        new Point { X = -1, Y = 0 }
 
                     }
             };

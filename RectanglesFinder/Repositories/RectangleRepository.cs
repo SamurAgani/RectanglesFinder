@@ -60,14 +60,40 @@ namespace RectanglesFinder.Repositories
 
             var rectangleDictionary = new Dictionary<int, Rectangle>();
 
-            var rectangles = await connection.QueryAsync<Rectangle, BasePoint, Rectangle>(
+            var rectangles = await connection.QueryAsync<Rectangle, Point, Rectangle>(
                 "SELECT r.*, p.* FROM Rectangle r INNER JOIN Point p ON r.Id = p.RectangleId",
                 (rectangle, point) =>
                 {
                     if (!rectangleDictionary.TryGetValue(rectangle.Id.Value, out var rectangleEntry))
                     {
                         rectangleEntry = rectangle;
-                        rectangleEntry.Points = new List<BasePoint>();
+                        rectangleEntry.Points = new List<Point>();
+                        rectangleDictionary.Add(rectangleEntry.Id.Value, rectangleEntry);
+                    }
+
+                    rectangleEntry.Points.Add(point);
+                    return rectangleEntry;
+                },
+                splitOn: "Id");
+
+
+            return BaseResponse<IEnumerable<Rectangle>>.Success(rectangles.Distinct());
+        }
+
+        public async Task<BaseResponse<IEnumerable<Rectangle>>> SearchRectangles(SearchSegment searchSegment)
+        {
+            using var connection = GetConnection();
+
+            var rectangleDictionary = new Dictionary<int, Rectangle>();
+
+            var rectangles = await connection.QueryAsync<Rectangle, Point, Rectangle>(
+                "SELECT r.*, p.* FROM Rectangle r INNER JOIN Point p ON r.Id = p.RectangleId where",
+                (rectangle, point) =>
+                {
+                    if (!rectangleDictionary.TryGetValue(rectangle.Id.Value, out var rectangleEntry))
+                    {
+                        rectangleEntry = rectangle;
+                        rectangleEntry.Points = new List<Point>();
                         rectangleDictionary.Add(rectangleEntry.Id.Value, rectangleEntry);
                     }
 

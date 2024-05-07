@@ -3,6 +3,6 @@ namespace RectanglesFinder.Models
 {
     public class BaseRectangle
     {
-        public List<BasePoint> Points { get; set; }
+        public List<Point> Points { get; set; }
     }
 }
