@@ -25,20 +25,51 @@ namespace RectangleFinderTest
         public async Task SearchRectangles_ReturnsExpectedRectangles()
         {
             // Arrange
-            var searchRectangle = new BaseRectangle
+            var searchRectangle = new SearchSegment
             {
-                Xmin = 0,
-                Xmax = 50,
-                Ymin = 0,
-                Ymax = 50
+                StartPoint = new Point() { X = 11, Y = 0 },
+                EndPoint = new Point() { X = -11, Y = 0 }
             };
 
             // Simulate a list of rectangles to return from the repository
             var allRectangles = new List<Rectangle>
             {
-                new Rectangle { Id = 1, Xmin = 10, Xmax = 40, Ymin = 10, Ymax = 40 },
-                new Rectangle { Id = 2, Xmin = 40, Xmax = 80, Ymin = 40, Ymax = 80 },
-                new Rectangle { Id = 3, Xmin = -10, Xmax = 20, Ymin = -1, Ymax = 20 }
+                new Rectangle()
+                {
+                    Id = 2,
+                    Points = new List<BasePoint>()
+                        {
+                            new BasePoint { X = 0, Y = 1 },
+                            new BasePoint { X = 1, Y = 0 },
+                            new BasePoint { X = 0, Y = -1 },
+                            new BasePoint { X = -1, Y = 0 }
+               
+                        }
+                },
+                new Rectangle()
+                {
+                    Id = 2,
+                    Points = new List<BasePoint>()
+                        {
+                            new BasePoint { X = 3, Y = 3 },
+                            new BasePoint { X = 2, Y = 2 },
+                            new BasePoint { X = 4, Y = 2 },
+                            new BasePoint { X = 3, Y = 1 }
+               
+                        }
+                },
+                new Rectangle()
+                {
+                    Id = 3,
+                    Points = new List<BasePoint>()
+                        {
+                            new BasePoint { X = 3, Y = 13 },
+                            new BasePoint { X = 12, Y = 2 },
+                            new BasePoint { X = 4, Y = 2 },
+                            new BasePoint { X = 3, Y = 111 }
+               
+                        }
+                }
             };
 
             // Setup the repository to return a successful response
@@ -51,32 +82,28 @@ namespace RectangleFinderTest
             // Assert
             Assert.IsTrue(response.IsSuccessful);
             var result = response.Data.ToList();
-            Assert.AreEqual(2, result.Count); // Only two rectangles match the search criteria
+            Assert.AreEqual(1, result.Count); // Only two rectangles match the search criteria
             Assert.AreEqual(2, result[0].Id);
-            Assert.AreEqual(3, result[1].Id);
         }
 
-        [Test]
-        public async Task Validate_ShouldFail_WhenXminGreaterThanXmax()
-        {
-            // Arrange
-            var invalidRectangle = new BaseRectangle { Xmax = 0, Xmin = 100, Ymax = 100, Ymin = 0 };
-
-            // Act
-            var result = await _rectangleService.Validate(invalidRectangle);
-
-            // Assert
-            Assert.IsFalse(result.IsSuccessful);
-        }
 
         [Test]
-        public async Task Validate_ShouldFail_WhenYminGreaterThanYmax()
+        public async Task Validate_ShouldFail_When()
         {
             // Arrange
-            var invalidRectangle = new BaseRectangle { Xmax = 100, Xmin = 0, Ymax = 0, Ymin = 100 };
+            var validRectangle = new BaseRectangle()
+            {
+                Points = new List<BasePoint>()
+                    {
+                        new BasePoint { X = -2, Y = 3 },
+                        new BasePoint { X = -2, Y = 1 },
+                        new BasePoint { X = -4, Y = 2 },
+                        new BasePoint { X = 0, Y = 2 }
 
+                    }
+            };
             // Act
-            var result = await _rectangleService.Validate(invalidRectangle);
+            var result = await _rectangleService.Validate(validRectangle);
 
             // Assert
             Assert.IsFalse(result.IsSuccessful);
@@ -86,7 +113,18 @@ namespace RectangleFinderTest
         public async Task Validate_ShouldPass_WhenValid()
         {
             // Arrange
-            var validRectangle = new BaseRectangle { Xmax = 100, Xmin = 0, Ymax = 100, Ymin = 0 };
+
+            var validRectangle = new BaseRectangle()
+            {
+                Points = new List<BasePoint>()
+                    {
+                        new BasePoint { X = 0, Y = 1 },
+                        new BasePoint { X = 1, Y = 0 },
+                        new BasePoint { X = 0, Y = -1 },
+                        new BasePoint { X = -1, Y = 0 }
+
+                    }
+            };
 
             // Act
             var result = await _rectangleService.Validate(validRectangle);

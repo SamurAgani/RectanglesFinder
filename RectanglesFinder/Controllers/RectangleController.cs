@@ -53,9 +53,9 @@ namespace RectanglesFinder.Controllers
         }
 
         [HttpPost("SearchRectangle")]
-        public async Task<IActionResult> SearchRectangle([FromBody] BaseRectangle rectangle)
+        public async Task<IActionResult> SearchRectangle([FromBody] SearchSegment segmentSearch)
         {
-            var response = await _rectangleService.SearchRectangles(rectangle);
+            var response = await _rectangleService.SearchRectangles(segmentSearch);
             return CreateActionResultInstance(response);
         }
     }

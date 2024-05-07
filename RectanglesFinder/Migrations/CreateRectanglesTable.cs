@@ -3,22 +3,29 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace RectanglesFinder.Migrations
 {
-    [Migration(1)]
+    [Migration(2)]
     public class CreateRectanglesTable : Migration
     {
         public override void Up()
         {
+
+
             Create.Table("Rectangle")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                .WithColumn("Xmin").AsInt32().NotNullable()
-                .WithColumn("Ymin").AsInt32().NotNullable()
-                .WithColumn("Xmax").AsInt32().NotNullable()
-                .WithColumn("Ymax").AsInt32().NotNullable();
+             .WithColumn("Id").AsInt32().PrimaryKey().Identity();
+
+
+            Create.Table("Point")
+             .WithColumn("Id").AsInt32().PrimaryKey().Identity()
+             .WithColumn("X").AsInt32()
+             .WithColumn("Y").AsInt32()
+             .WithColumn("RectangleId").AsInt32().ForeignKey("FK_BaseRectangles_Id", "Rectangle", "Id");
+
         }
 
         public override void Down()
         {
             Delete.Table("Rectangle");
+            Delete.Table("Points");
         }
     }
 }

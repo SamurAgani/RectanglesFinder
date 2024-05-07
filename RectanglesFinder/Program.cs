@@ -49,7 +49,7 @@ using (var migrationScope = app.Services.CreateScope())
 using (var scope = app.Services.CreateScope())
 {
     var service = scope.ServiceProvider.GetRequiredService<IRectangleService>();
-    await service.SeedRectangles(100);
+    await service.SeedRectangles();
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();

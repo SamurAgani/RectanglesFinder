@@ -5,7 +5,7 @@ public static class DatabaseInitializer
 {
     public static void EnsureDatabaseCreated(IConfiguration configuration)
     {
-        string databaseName = "RectangleDB";
+        string databaseName = "RectanglesFinderDB";
 
 
         var connectionString = configuration["MasterDatabase"];
