@@ -9,5 +9,6 @@ namespace RectanglesFinder.Repositories
         Task<BaseResponse<IEnumerable<Rectangle>>> GetAll();
         Task<BaseResponse<bool>> UpdateRectangle(Rectangle rectangle);
         Task<BaseResponse<Rectangle>> GetById(int id);
+        Task<BaseResponse<IEnumerable<Rectangle>>> SearchIntersect(SearchSegment searchSegment);
     }
 }

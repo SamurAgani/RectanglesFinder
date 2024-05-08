@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using RectanglesFinder.Models;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace RectanglesFinder.Repositories
@@ -80,14 +81,14 @@ namespace RectanglesFinder.Repositories
             return BaseResponse<IEnumerable<Rectangle>>.Success(rectangles.Distinct());
         }
 
-        public async Task<BaseResponse<IEnumerable<Rectangle>>> SearchRectangles(SearchSegment searchSegment)
+        public async Task<BaseResponse<IEnumerable<Rectangle>>> SearchIntersect(SearchSegment searchSegment)
         {
             using var connection = GetConnection();
 
             var rectangleDictionary = new Dictionary<int, Rectangle>();
 
             var rectangles = await connection.QueryAsync<Rectangle, Point, Rectangle>(
-                "SELECT r.*, p.* FROM Rectangle r INNER JOIN Point p ON r.Id = p.RectangleId where",
+                "EXEC CheckAllRectanglesIntersection   @segmentStartX = @startX,   @segmentStartY = @startY,  @segmentEndX = @endX,  @segmentEndY = @endY",
                 (rectangle, point) =>
                 {
                     if (!rectangleDictionary.TryGetValue(rectangle.Id.Value, out var rectangleEntry))
@@ -99,7 +100,7 @@ namespace RectanglesFinder.Repositories
 
                     rectangleEntry.Points.Add(point);
                     return rectangleEntry;
-                },
+                }, new { startX = searchSegment.StartPoint.X, startY = searchSegment.StartPoint.Y, endX  = searchSegment.EndPoint.X, endY = searchSegment.EndPoint.Y},
                 splitOn: "Id");
 
 

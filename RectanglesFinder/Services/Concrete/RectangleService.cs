@@ -60,10 +60,8 @@ public class RectangleService : IRectangleService
     public async Task<BaseResponse<IEnumerable<Rectangle>>> SearchRectangles(SearchSegment searchSegment)
     {
 
-        var allRectangles = await _rectangleRepository.GetAll();
-        var rectangles = allRectangles.Data.Where(r => RectanglesIntersect(searchSegment.StartPoint, searchSegment.EndPoint, r))
-                                           .ToList();
-        return BaseResponse<IEnumerable<Rectangle>>.Success(rectangles);
+        var allRectangles = await _rectangleRepository.SearchIntersect(searchSegment);
+        return allRectangles;
     }
 
     public async Task SeedRectangles()
@@ -130,6 +128,8 @@ public class RectangleService : IRectangleService
         }
         return BaseResponse<bool>.Success(true);
     }
+
+
     #region Private methods
 
     private List<Point> OrderRectanglePoints(List<Point> points)
@@ -146,45 +146,6 @@ public class RectangleService : IRectangleService
         Point bottomLeft = ordered[3] == bottomRight || ordered[2] == bottomRight ? ordered[1] : ordered[3];
 
         return new List<Point> { topLeft, topRight, bottomRight, bottomLeft };
-    }
-    private bool RectanglesIntersect(BasePoint segmentStart, BasePoint segmentEnd, Rectangle rectangle)
-    {
-        return (Intersects(segmentStart, segmentEnd, rectangle.Points[0], rectangle.Points[1]) ||
-               Intersects(segmentStart, segmentEnd, rectangle.Points[1], rectangle.Points[2]) ||
-               Intersects(segmentStart, segmentEnd, rectangle.Points[2], rectangle.Points[3]) ||
-               Intersects(segmentStart, segmentEnd, rectangle.Points[3], rectangle.Points[0]));
-    }
-
-    public bool Intersects(BasePoint p1, BasePoint p2, BasePoint p3, BasePoint p4)
-    {
-        // Calculate direction of the points
-        double d1 = Direction(p3, p4, p1);
-        double d2 = Direction(p3, p4, p2);
-        double d3 = Direction(p1, p2, p3);
-        double d4 = Direction(p1, p2, p4);
-
-        // Check if the segments straddle each other
-        if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
-            return true;
-
-        // Check for collinearity
-        if (d1 == 0 && OnSegment(p3, p4, p1)) return true;
-        if (d2 == 0 && OnSegment(p3, p4, p2)) return true;
-        if (d3 == 0 && OnSegment(p1, p2, p3)) return true;
-        if (d4 == 0 && OnSegment(p1, p2, p4)) return true;
-
-        return false;
-    }
-    private double Direction(BasePoint pi, BasePoint pj, BasePoint pk)
-    {
-        // Cross-product to find the direction
-        return (pk.X - pi.X) * (pj.Y - pi.Y) - (pj.X - pi.X) * (pk.Y - pi.Y);
-    }
-
-    private bool OnSegment(BasePoint pi, BasePoint pj, BasePoint pk)
-    {
-        return (Math.Min(pi.X, pj.X) <= pk.X && pk.X <= Math.Max(pi.X, pj.X) &&
-                Math.Min(pi.Y, pj.Y) <= pk.Y && pk.Y <= Math.Max(pi.Y, pj.Y));
     }
     private BaseRectangle CreateRectangle(int x1, int y1, int x2, int y2)
     {
